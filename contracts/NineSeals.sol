@@ -19,6 +19,8 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
     // // uint16 public constant MAX_TOKENS = 444;    
     // uint32 public PRESALE_DURATION = 1 days;
 
+    bool private _mintPaused;
+
     uint64 private _tokenCounter;
 
     uint64 public _totalAllowedTokens;
@@ -70,7 +72,8 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
         uint256 price = uint256(config.salePrice);
         Mintoor memory mintoor = mintoors[msg.sender];
         
-        require(price != 0, "allowlist sale has not begun yet");
+        require(!isMintPaused(), "mint is paused");
+        require(isAllowlistSaleOn(), "allowlist sale has not begun yet");
         require(mintoor.maxAllowlistTokens > 0, "not eligible for allowlist mint");
         require(totalSupply() + quantity <= _totalAllowedTokens, "reached max supply");
         require(numberMinted(msg.sender) + quantity <= allowlistTokensRemaining(msg.sender), "you have exceeded the max number of allowlist tokens you can mint");
@@ -91,6 +94,7 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
         uint256 salePrice = uint256(config.salePrice);
         
         require(saleKey == callerPublicSaleKey, "called with incorrect public sale key");
+        require(!isMintPaused(), "mint is paused");
         require(isPublicSaleOn(), "public sale has not begun yet");
         require(totalSupply() + quantity <= _totalAllowedTokens, "reached max supply");
         require(quantity <= publicSaleTokensRemaining(msg.sender), "you have exceeded the max number of tokens you can mint");
@@ -182,8 +186,21 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
         return block.timestamp - config.saleStartTime;
     }
 
+    function isAllowlistSaleOn() public view returns (bool) {
+        SaleConfig memory config = allowlistSaleConfig; 
+        return !isPublicSaleOn() && config.saleStartTime > 0 && block.timestamp >= config.saleStartTime;
+    }
+
     function isPublicSaleOn() public view returns (bool) {
         SaleConfig memory config = publicSaleConfig; 
         return config.saleStartTime > 0 && block.timestamp >= config.saleStartTime;
+    }
+
+    function isSaleClosed() public view returns (bool) {
+        return totalSupply() >= collectionSize();
+    }
+
+    function isMintPaused() public view returns (bool) {
+        return _mintPaused;
     }
 }
