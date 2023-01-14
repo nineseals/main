@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Web3 from 'web3';
 
 import Header from './components/Header/Header';
@@ -9,13 +9,20 @@ const SALE_STATUS_NOT_STARTED = 0;
 const SALE_STATUS_ALLOWLIST = 1;
 const SALE_STATUS_PUBLIC = 2;
 const SALE_STATUS_DONE = 3;
+const SALE_STATUS_PAUSED = 4;
+
+const PUBLIC_SALE_KEY = 123456789;
 
 function App() {
+
+  const mintNumRef = useRef(null);
 
   const [web3, setWeb3] = useState(null);
   const [currentAccount, setCurrentAccount] = useState(null);
   const [contract, setContract] = useState(null);
   const [saleStatus, setSaleStatus] = useState(null);
+  const [salePrice, setSalePrice] = useState(null);
+  const [userConfig, setUserConfig] = useState({});
   
   useEffect(() => {
     init();    
@@ -28,9 +35,35 @@ function App() {
   }, [web3]);
 
   useEffect(() => {
-    checkSaleStatus();
+    let checkStatusInterval = null;
+    
+    if (contract) {
+      checkStatusInterval = setInterval(() => {
+        checkSaleStatus();
+      }, 5000);
+      
+      getUserConfig();
+    }
+
+    return () => clearInterval(checkStatusInterval);
   }, [contract]);
 
+  useEffect(() => {
+    if (saleStatus > 0) {
+      console.log("Status:", saleStatus);
+      getSalePrice();
+    }
+  }, [saleStatus]);
+
+  // DEBUG ONLY
+  useEffect(() => {
+    console.log("userConfig:", userConfig);
+  }, [userConfig]);
+
+  // DEBUG ONLY
+  useEffect(() => {
+    console.log("salePrice:", salePrice);
+  }, [salePrice]);
 
   const init = async () => {
     // Get network provider and web3 instance.
@@ -60,10 +93,6 @@ function App() {
       console.log("No authorized account found");
     }
 
-    
-
-    
-
     console.log("Network: ", await web3.eth.net.getId());
     const contractAddress = oContract.networks[await web3.eth.net.getId()].address;
     const abi = oContract.abi;
@@ -74,8 +103,7 @@ function App() {
 
     console.log(accounts);
 
-        await setContract(nftContract);
-
+    setContract(nftContract);
   }
 
   const connectWalletHandler = async () => {
@@ -94,34 +122,91 @@ function App() {
     }
   }
 
+  const disconnectWalletHandler = async () => {
+    setCurrentAccount(null);
+  }
+
   const checkSaleStatus = async () => {
-    let currStatus = SALE_STATUS_NOT_STARTED;
-
     if (!contract) { 
-        await setSaleStatus(SALE_STATUS_NOT_STARTED);
+      console.log('No contract available to get status');
+    } else if (await contract.methods.isSaleClosed().call()) {
+      setSaleStatus(SALE_STATUS_DONE);
+    } else if (await contract.methods.isMintPaused().call()) {
+      setSaleStatus(SALE_STATUS_PAUSED);
+    } else if (await contract.methods.isPublicSaleOn().call()) {
+      setSaleStatus(SALE_STATUS_PUBLIC);
+    } else if (await contract.methods.isAllowlistSaleOn().call()) {
+      setSaleStatus(SALE_STATUS_ALLOWLIST);
     } else {
-      currStatus = await contract.methods.isPublicSaleOn().call();
-
-      console.log("Status", currStatus);
+      setSaleStatus(SALE_STATUS_NOT_STARTED);
     }
   }
 
+  const getSalePrice = async () => {
+    if (contract) {
+      const mintCost = await contract.methods.getMintPrice().call();
+      console.log(`Fetched mint cost: ${mintCost}`);
+      setSalePrice(mintCost);
+    }
+  }
+
+  const getUserConfig = async () => {
+
+    if (!contract) { 
+      return false;
+    } 
+    
+    const allowlistSlots = Number(await contract.methods.allowlistSlots(currentAccount).call());
+    const allowlistRemaining =  Number(await contract.methods.allowlistTokensRemaining(currentAccount).call());
+
+    const publicSlots = Number(await contract.methods.maxMintableTokens(currentAccount).call());
+    const publicRemaining =  Number(await contract.methods.publicSaleTokensRemaining(currentAccount).call());
+
+    setUserConfig({
+      ...userConfig,
+      allowlistSlots,
+      allowlistRemaining,
+      publicSlots,
+      publicRemaining,
+    });
+
+    return (allowlistRemaining > 0); 
+  }
+
+  
   const mintNftHandler = async () => {
     try {
       const { ethereum } = window;
 
       if (ethereum) {
 
-        
-        console.log("Initialize payment");
+        const mintQty = Number(mintNumRef.current.value);
 
-        
-        let nftTxn = await contract.methods.publicSaleMint(1, 123456789).send({ from: currentAccount, value: web3.utils.toWei("0.02", "ether") }).on('receipt', function () {
-          console.log('receipt')
-        });
+        if (!mintQty) {
+          return;
+        }
 
-        console.log("Mining...please wait");
-        console.log("Mined: ", nftTxn.transactionHash);
+        const mintTotalCost = new web3.utils.BN(salePrice).muln(mintQty);
+
+        console.log(`Minting ${mintQty} tokens for ${web3.utils.fromWei(mintTotalCost, 'ether')} ether.`);
+        
+        let nftTxn = null;
+
+        if (saleStatus === SALE_STATUS_ALLOWLIST) {
+          nftTxn = await contract.methods.allowlistMint(mintQty).send({ from: currentAccount, value: mintTotalCost.toString() }).on('receipt', function () {
+            console.log('receipt')
+          });
+
+        } else {
+          nftTxn = await contract.methods.publicSaleMint(mintQty, PUBLIC_SALE_KEY).send({ from: currentAccount, value: mintTotalCost.toString() }).on('receipt', function () {
+            console.log('receipt')
+          });
+        }
+
+        console.log("Minting...please wait");
+        console.log("Minted: ", nftTxn.transactionHash);
+
+        await getUserConfig();
 
       } else {
         console.log("Ethereum object does not exist");
@@ -131,28 +216,94 @@ function App() {
       console.log(err);
     }
   }
+  
+  const mintNftForm = () => {
+    const maxMints = (saleStatus === SALE_STATUS_ALLOWLIST) 
+      ? userConfig.allowlistRemaining
+      : userConfig.publicRemaining;
 
-  const connectWalletButton = () => {
+      if (mintNumRef.current && mintNumRef.current.value > maxMints) {
+        mintNumRef.current.value = maxMints;
+      }
+
     return (
-      <button onClick={connectWalletHandler} className='cta-button connect-wallet-button'>
-        Connect Wallet
-      </button>
+      <div>
+        <div className="form-row">
+          <input ref={mintNumRef} type="number" step="1" min="1" max={maxMints} defaultValue={maxMints} className="input-mint-number" />
+        </div>
+        <div className="form-row">
+          <button onClick={mintNftHandler} className='cta-button mint-nft-button'>
+            Mint
+          </button>
+        </div>
+      </div>      
     )
+  };
+
+  const printSaleState = () => {
+    switch (saleStatus) {
+      case SALE_STATUS_ALLOWLIST:
+        return allowlistState();
+
+      case SALE_STATUS_PUBLIC:
+        return publicSaleState();
+
+      case SALE_STATUS_PAUSED:
+        return mintPausedState();
+
+      case SALE_STATUS_DONE:
+        return saleClosedState();
+
+      default:
+        return "";
+    }
   }
 
-  const mintNftButton = () => {
+  const mintPausedState = () => {
     return (
-      <button onClick={mintNftHandler} className='cta-button mint-nft-button'>
-        Mint NFT
-      </button>
-    )
-  }
+      <div>
+        <h1>Mint Paused</h1>
+      </div>
+    );
+  };
+
+  const saleClosedState = () => {
+    return (
+      <div>
+        <h1>Mint has finished</h1>
+      </div>
+    );
+  };
+
+  const allowlistState = () => {
+    return (
+      <div>
+        <h1>Allowlist Pre-sale</h1>
+        {
+          userConfig.allowlistSlots 
+          ? `You have ${userConfig.allowlistRemaining} allowlist mints remaining.`
+          : `Not on allowlist`
+        }
+        { mintNftForm() }
+      </div>
+    );
+  };
+
+  const publicSaleState = () => {
+    return (
+      <div>
+        <h1>Public Sale</h1>
+        <div>You have {userConfig.publicRemaining} mints remaining.</div>
+        { mintNftForm() }
+      </div>
+    );
+  };
 
   return (
     <div className='App'>
-      <Header />
+      <Header connectWalletHandler={connectWalletHandler} disconnectWalletHandler={disconnectWalletHandler} wallet={currentAccount} />
       <div className='main-app'>
-          {currentAccount ? mintNftButton() : connectWalletButton()}
+          {currentAccount ? printSaleState() : <h2>Please connect wallet to mint</h2>}
         </div>
       </div>
   )
