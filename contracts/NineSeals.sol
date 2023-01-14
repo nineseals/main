@@ -69,14 +69,15 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
     // Mint: Allowlist
     function allowlistMint(uint256 quantity) external payable callerIsUser {
         SaleConfig memory config = allowlistSaleConfig;        
-        uint256 price = uint256(config.salePrice);
+        uint256 salePrice = uint256(config.salePrice);
         Mintoor memory mintoor = mintoors[msg.sender];
         
         require(!isMintPaused(), "mint is paused");
         require(isAllowlistSaleOn(), "allowlist sale has not begun yet");
         require(mintoor.maxAllowlistTokens > 0, "not eligible for allowlist mint");
         require(totalSupply() + quantity <= _totalAllowedTokens, "reached max supply");
-        require(numberMinted(msg.sender) + quantity <= allowlistTokensRemaining(msg.sender), "you have exceeded the max number of allowlist tokens you can mint");
+        require(quantity <= allowlistTokensRemaining(msg.sender), "you have exceeded the max number of allowlist tokens you can mint");
+        require(msg.value >= salePrice.mul(quantity), "not enough ether to complete purchase.");
 
         for(uint256 i = 0; i < quantity; i++) {
             _safeMint(msg.sender, _tokenCounter);
@@ -129,7 +130,7 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
     }
 
     function setCollectionSize(uint256 collectionSize) external onlyOwner {
-        require(_totalAllowedTokens >= totalSupply(), "cannot make collection size smaller than supply");
+        require(collectionSize >= totalSupply(), "cannot make collection size smaller than supply");
         _totalAllowedTokens = uint64(collectionSize);
     }
 
@@ -197,10 +198,24 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
     }
 
     function isSaleClosed() public view returns (bool) {
-        return totalSupply() >= collectionSize();
+        return totalSupply() > 0 && totalSupply() >= collectionSize();
     }
 
     function isMintPaused() public view returns (bool) {
         return _mintPaused;
+    }
+
+    function pauseMint(bool isPaused) external onlyOwner {
+        _mintPaused = isPaused;
+    }
+
+    function getMintPrice() public view returns (uint256) {
+        if (isPublicSaleOn()) {
+           return publicSaleConfig.salePrice;
+        } else if (isAllowlistSaleOn()) {
+            return allowlistSaleConfig.salePrice;
+        } else {
+            return 0;
+        }
     }
 }
