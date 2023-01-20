@@ -14,6 +14,12 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
     uint64 public constant DEFAULT_MAX_BATCH_SIZE = 5;
     uint64 public constant DEFAULT_COLLECTION_SIZE = 10000;
 
+    uint8 private constant SALE_STATUS_NOT_STARTED = 0;
+    uint8 private constant SALE_STATUS_ALLOWLIST = 1;
+    uint8 private constant SALE_STATUS_PUBLIC = 2;
+    uint8 private constant SALE_STATUS_DONE = 3;
+    uint8 private constant SALE_STATUS_PAUSED = 4;
+
     // uint8 public constant MAX_WL_PURCHASE_TOKENS = 3;
     // uint8 public constant MAX_PUBLIC_PURCHASE_TOKENS = 5;    
     // // uint16 public constant MAX_TOKENS = 444;    
@@ -116,6 +122,13 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
         }
     }
 
+    function updateMaxMints(address[] memory addresses, uint256[] memory numSlots) external onlyOwner {
+        require(addresses.length == numSlots.length, "addresses does not match numSlots length");
+        for (uint256 i = 0; i < addresses.length; i++) {
+            mintoors[addresses[i]].maxPublicSaleTokens = uint128(numSlots[i]);
+        }
+    }
+
     function initializeAllowlistSale(uint16 maxBatchSize, uint256 salePrice, uint32 saleStartTime) external onlyOwner {
         allowlistSaleConfig.maxBatchSize = maxBatchSize;
         allowlistSaleConfig.saleStartTime = saleStartTime;
@@ -185,6 +198,20 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
     function getAllowlistSaleDuration() public view returns (uint256) {
         SaleConfig memory config = allowlistSaleConfig; 
         return block.timestamp - config.saleStartTime;
+    }
+
+    function getSaleStatus() public view returns (uint8) {
+        if (isSaleClosed()) {
+            return SALE_STATUS_DONE;
+        } else if (isMintPaused()) {
+            return SALE_STATUS_PAUSED;
+        } else if (isPublicSaleOn()) {
+            return SALE_STATUS_PUBLIC;
+        } else if (isAllowlistSaleOn()) {
+            return SALE_STATUS_ALLOWLIST;
+        } else {
+            return SALE_STATUS_NOT_STARTED;
+        }
     }
 
     function isAllowlistSaleOn() public view returns (bool) {
