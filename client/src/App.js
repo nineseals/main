@@ -67,7 +67,7 @@ function App() {
       checkStatusInterval = setInterval(() => {
         checkSaleStatus();
         updateMintCounts();
-      }, 5000);
+      }, 2500);
       
       getUserConfig();
     }
@@ -207,22 +207,21 @@ function App() {
     if (!contract || !currentAccount) { 
       return false;
     } 
+
+    const _userConfig = await contract.methods.getUserConfig(currentAccount).call();
+
     
-    const allowlistSlots = Number(await contract.methods.allowlistSlots(currentAccount).call());
-    const allowlistRemaining =  Number(await contract.methods.allowlistTokensRemaining(currentAccount).call());
+    // const allowlistSlots = Number(await contract.methods.allowlistSlots(currentAccount).call());
+    // const allowlistRemaining =  Number(await contract.methods.allowlistTokensRemaining(currentAccount).call());
 
-    const publicSlots = Number(await contract.methods.maxMintableTokens(currentAccount).call());
-    const publicRemaining =  Number(await contract.methods.publicSaleTokensRemaining(currentAccount).call());
+    // const publicSlots = Number(await contract.methods.maxMintableTokens(currentAccount).call());
+    // const publicRemaining =  Number(await contract.methods.publicSaleTokensRemaining(currentAccount).call());
 
-    const tokenBalance = Number(await contract.methods.numberMinted(currentAccount).call());
+    // const tokenBalance = Number(await contract.methods.numberMinted(currentAccount).call());
 
     setUserConfig({
       ...userConfig,
-      allowlistSlots,
-      allowlistRemaining,
-      publicSlots,
-      publicRemaining,
-      tokenBalance,
+      ...(_userConfig || {})
     });
   }
 
@@ -276,8 +275,8 @@ function App() {
   
   const mintNftForm = () => {
     const maxMints = (saleStatus === SALE_STATUS_ALLOWLIST) 
-      ? userConfig.allowlistRemaining
-      : userConfig.publicRemaining;
+      ? userConfig.userAllowlistRemaining
+      : userConfig.userPublicRemaining;
 
       if (mintNumRef.current && mintNumRef.current.value > maxMints) {
         mintNumRef.current.value = maxMints;
@@ -357,8 +356,8 @@ function App() {
         {salePctMinted}
         <p>
         {
-          userConfig.allowlistSlots 
-          ? `You have ${userConfig.allowlistRemaining} allowlist mints remaining.`
+          userConfig.userAllowlistSlots 
+          ? `You have ${userConfig.userAllowlistRemaining} allowlist mints remaining.`
           : `You are not on the allowlist`
         }
         </p>
@@ -372,7 +371,7 @@ function App() {
       <div>
         <h1>Public Sale</h1>
         {salePctMinted}
-        <div>You have {userConfig.publicRemaining} mints remaining.</div>
+        <div>You have {userConfig.userPublicRemaining} mints remaining.</div>
         { mintNftForm() }
       </div>
     );
