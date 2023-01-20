@@ -245,4 +245,14 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
             return 0;
         }
     }
+
+    function getUserConfig(address owner) public view returns (uint256 userTokenBalance, uint256 userAllowlistSlots, uint256 userAllowlistRemaining, uint256 userPublicSlots, uint256 userPublicRemaining) {
+        uint256 _allowlistSlots = allowlistSlots(owner);
+        uint256 _allowlistRemaining= allowlistTokensRemaining(owner);
+        uint256 _publicSlots = maxMintableTokens(owner);
+        uint256 _publicRemaining =  publicSaleTokensRemaining(owner);
+        uint256 _tokenBalance = numberMinted(owner);
+
+        return (_allowlistSlots, _allowlistRemaining, _publicSlots, _publicRemaining, _tokenBalance);
+    }
 }
