@@ -58,7 +58,9 @@ function App() {
         initContract();
       });
     }
-  }, [web3]);
+  }, 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [web3]);
 
   useEffect(() => {
     let checkStatusInterval = null;
@@ -73,14 +75,18 @@ function App() {
     }
 
     return () => clearInterval(checkStatusInterval);
-  }, [contract]);
+  }, 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [contract]);
 
   useEffect(() => {
     if (saleStatus > 0) {
       console.log("Status:", saleStatus);
       getSalePrice();
     }
-  }, [saleStatus]);
+  }, 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [saleStatus]);
 
   // // DEBUG ONLY
   // useEffect(() => {
