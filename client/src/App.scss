@@ -24,6 +24,12 @@ main.wrapper {
     padding: 100px 0 150px 0;
     text-align: center;
 
+    @media only screen and (max-width:680px) {
+      & {
+        padding: 50px 0 50px 0;
+      }
+  }
+
     .section-title {
       font-family: $great-vibes;
       font-size: 4rem;
@@ -89,6 +95,7 @@ main.wrapper {
         @media only screen and (max-width:780px) {
           & {
             flex-direction: column;
+            padding: 0 4rem;
           }
         }
       }

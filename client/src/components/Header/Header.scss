@@ -9,6 +9,12 @@
 
         .logo {
             max-height: 8rem;
+
+            @media only screen and (max-width:680px) {
+                & {
+                    max-height: 4rem;
+                }
+            }
         }
     }
 
