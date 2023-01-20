@@ -82,15 +82,15 @@ function App() {
     }
   }, [saleStatus]);
 
-  // DEBUG ONLY
-  useEffect(() => {
-    console.log("userConfig:", userConfig);
-  }, [userConfig]);
+  // // DEBUG ONLY
+  // useEffect(() => {
+  //   console.log("userConfig:", userConfig);
+  // }, [userConfig]);
 
-  // DEBUG ONLY
-  useEffect(() => {
-    console.log("salePrice:", salePrice);
-  }, [salePrice]);
+  // // DEBUG ONLY
+  // useEffect(() => {
+  //   console.log("salePrice:", salePrice);
+  // }, [salePrice]);
 
   const init = async () => {
     // Get network provider and web3 instance.
@@ -102,7 +102,7 @@ function App() {
     // Use web3 to get the user's accounts.
     const accounts = await web3.eth.getAccounts();
 
-    console.log(accounts);
+    // console.log(accounts);
 
     if (accounts.length !== 0) {
       const account = accounts[0];
@@ -116,7 +116,7 @@ function App() {
 
   const initContract = async () => {
     const ethNetworkId = await web3.eth.net.getId();
-    console.log("Network: ", ethNetworkId);
+    // console.log("Network: ", ethNetworkId);
 
     if (!oContract.networks[ethNetworkId]) {
       setErrorMessage("Please make sure you are connected to mainnet");
@@ -131,7 +131,7 @@ function App() {
     // Create a contract instance
     const nftContract = new web3.eth.Contract(abi, contractAddress);
 
-    console.log(nftContract);
+    // console.log(nftContract);
 
     const collectionSize = await nftContract.methods.collectionSize().call();
 
@@ -197,7 +197,7 @@ function App() {
   const getSalePrice = async () => {
     if (contract) {
       const mintCost = await contract.methods.getMintPrice().call();
-      console.log(`Fetched mint cost: ${mintCost}`);
+      // console.log(`Fetched mint cost: ${mintCost}`);
       setSalePrice(mintCost);
     }
   }
@@ -246,16 +246,16 @@ function App() {
 
         if (saleStatus === SALE_STATUS_ALLOWLIST) {
           nftTxn = await contract.methods.allowlistMint(mintQty).send({ from: currentAccount, value: mintTotalCost.toString() }).on('receipt', function () {
-            console.log('receipt')
+            // console.log('receipt')
           });
 
         } else {
           nftTxn = await contract.methods.publicSaleMint(mintQty, PUBLIC_SALE_KEY).send({ from: currentAccount, value: mintTotalCost.toString() }).on('receipt', function () {
-            console.log('receipt')
+            // console.log('receipt')
           });
         }
 
-        console.log("Minting...please wait");
+        // console.log("Minting...please wait");
         console.log("Minted: ", nftTxn.transactionHash);
 
         if (`transactionHash` in nftTxn) {
