@@ -402,8 +402,8 @@ function App() {
                 <h2 className="section-title">Team</h2>
                 <div className="team">
                   <TeamMember imageUrl={pfpFounder} title="Founder" description="Alpha caller for Renga Alpha, Onchain Buccaneers, Domain alpha, Horde AI, Alpha king, Spesh alpha, and more." />
-                  <TeamMember imageUrl={pfpDev} title="Developer" description="" />
-                  <TeamMember imageUrl={pfpArtist} title="Creative Director" description="" />
+                  <TeamMember imageUrl={pfpDev} title="Developer" description=".  .  ." />
+                  <TeamMember imageUrl={pfpArtist} title="Creative Director" description=".  .  ." />
                 </div>
               </div>
             </section>

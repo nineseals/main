@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.scss";
 
 // import required modules
-import { EffectCoverflow, Mousewheel } from "swiper";
+import { EffectCoverflow } from "swiper";
 
 import './CollectionPreviews.scss';
 
@@ -55,8 +55,7 @@ const CollectionPreviews = (props) => {
               modifier: 1,
               slideShadows: true,
             }}
-            mousewheel={true}
-            modules={[EffectCoverflow, Mousewheel]}
+            modules={[EffectCoverflow]}
             className="mySwiper"
           >
             {slides}
