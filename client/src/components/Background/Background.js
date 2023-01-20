@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserView } from 'react-device-detect';
 
 import bgVideo from '../../assets/img/preloader-effect.mp4';
 import './Background.scss';
@@ -6,6 +7,7 @@ import './Background.scss';
 const Background = (props) => {
 
     return (
+      <BrowserView>
       <div id="qodef-page-spinner" className="qodef-m qodef-layout--plamen" style={{opacity: 1}}>
         <div className="qodef-m-inner">
           <div className="qodef-m-spinner">
@@ -19,6 +21,7 @@ const Background = (props) => {
           </div>
         </div>
       </div>
+      </BrowserView>
     );
 }
 
