@@ -294,7 +294,7 @@ function App() {
         </div>
         {
           txHash && 
-            <div className="tx-receipt"><a href={`https://etherscan.io/tx/${txHash}`} target="_blank">View Tx on Etherscan <TbExternalLink /></a></div>
+            <div className="tx-receipt"><a href={`https://etherscan.io/tx/${txHash}`} target="_blank" rel="noopener noreferrer">View Tx on Etherscan <TbExternalLink /></a></div>
         }
       </div>      
     )
