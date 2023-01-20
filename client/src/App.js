@@ -4,9 +4,12 @@ import { TbExternalLink } from "react-icons/tb";
 
 import Background from "./components/Background/Background";
 import Header from './components/Header/Header';
-import './App.scss';
-import oContract from './contracts/NineSeals.json';
+import CollectionPreviews from './components/CollectionPreviews/CollectionPreviews';
 import TeamMember from "./components/TeamMember/TeamMember";
+
+import oContract from './contracts/NineSeals.json';
+
+import './App.scss';
 
 import pfpFounder from './assets/img/pfp_ikari.png';
 import pfpDev from './assets/img/pfp_itsbradleybitch.png';
@@ -389,6 +392,11 @@ function App() {
                 </div>
               </div>
             </section>          
+            <section className="content-container section-previews">
+              <div className="content">
+                <CollectionPreviews />
+              </div>
+            </section>
             <section className="content-container section-team">
               <div className="content">
                 <h2 className="section-title">Team</h2>
