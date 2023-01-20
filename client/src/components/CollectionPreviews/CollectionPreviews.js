@@ -35,8 +35,8 @@ const previewImages = [
 const CollectionPreviews = (props) => {
 
     const slides = previewImages.map((item, key) => (
-      <SwiperSlide>
-        <img key={key} src={item} />
+      <SwiperSlide key={key}>
+        <img src={item} alt={`Preview ${key}`} />
       </SwiperSlide>
     ));
 
