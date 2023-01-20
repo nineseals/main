@@ -1,21 +1,107 @@
 @import "./assets/scss";
 
+* {
+  box-sizing: border-box;
+}
+
 body, html {
   height: 100%;
   margin: 0;
 }
 
-.App {
-  width: 100vw;
-  height: 100vh;
-  background-image: url('assets/img/mesh_bg.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
+main.wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
 }
 
 .main-app {
-  text-align: center;
-  margin: 100px;
+  width: 100vw;
+  height: 100vh;
+
+  section.content-container {
+    padding: 100px 0 150px 0;
+    text-align: center;
+
+    .section-title {
+      font-family: $great-vibes;
+      font-size: 4rem;
+      font-weight: 300;
+      color: $white;
+    }
+
+    &.section-mint {
+      min-height: 400px;
+
+      .mint-container {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        margin: 0 auto;
+        padding: 1rem;
+        background: rgba(0,0,0,.65);
+        border: solid 1px $brand-gold;
+        border-radius: 1rem;
+        min-height: 400px;
+        align-items: center;
+        justify-content: center;
+
+        @media only screen and (max-width:680px) {
+          & {
+            width: 90%;
+          }
+        }
+
+        .tx-receipt {
+          margin: 1rem 0;
+
+          a {
+            font-size: 1rem;
+            color: $brand-gold;
+            text-decoration: none;
+          }
+        }
+
+        .mint-loading {          
+          font-family: $great-vibes;
+          font-size: 3rem;
+          color: $brand-gold;
+        }
+
+        .mint-count {
+          font-size: 1.5rem;
+          color: $brand-gold;
+          padding: 12px 0;
+          border: solid 1px $brand-gold;
+          border-radius: 4px;
+          margin: 10px 0 25px 0;
+        }
+      }
+    }
+
+    &.section-team {
+      .team {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 0 10rem;
+        width: 100%;
+
+        @media only screen and (max-width:780px) {
+          & {
+            flex-direction: column;
+          }
+        }
+      }
+    }
+
+    &.section-footer {
+      .contract-address {
+        color: $brand-gold;
+      }
+    }
+  }
 }
 
 .form-row {
@@ -44,4 +130,23 @@ body, html {
 
 .mint-nft-button {
   background: $brand-red;
+
+  &:disabled {
+    cursor: default;
+    opacity: .35;
+  }
+}
+
+
+.error-message-container {
+  margin: 1rem 0;
+  width: 100vw;
+  padding: 1rem 0;
+  background: $error;
+  text-align: center;
+
+  .error-message {
+    color: #fff;
+    font-weight: 700;
+  }
 }

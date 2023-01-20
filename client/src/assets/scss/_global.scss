@@ -1,3 +1,11 @@
 html, body {
     font-size: 16px;
+    line-height: 130%;
+    font-family: $josefin-sans;
+    color: $white;
 }
+
+h1, h2, h3, h4, h5, h6 {
+    color: $brand-gold;
+}
+

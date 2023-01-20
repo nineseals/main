@@ -24,7 +24,15 @@ const Header = (props) => {
             <div>
                 {
                     props.wallet 
-                    ? <button onClick={props.disconnectWalletHandler} className="wallet-connect-button">{props.wallet.toUpperCase()}</button>
+                    ? (
+                        <button 
+                            className={[
+                                `wallet-connect-button`,
+                                (props.wallet && `connected`)
+                            ].join(' ')}>
+                            {props.wallet.slice(0,4).toUpperCase()}...{props.wallet.slice(-4).toUpperCase()}
+                        </button>
+                      )
                     : <button onClick={props.connectWalletHandler} className="wallet-connect-button">Connect</button>
                 }               
             </div>

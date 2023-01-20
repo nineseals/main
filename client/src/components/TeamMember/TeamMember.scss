@@ -1,0 +1,57 @@
+@import '../../assets/scss';
+
+.team-member-item {
+    position: relative;
+    width: 25%;
+
+    @media only screen and (max-width:780px) {
+        & {
+          width: 100%;
+          margin: 0 0 50px 0;
+        }
+      }
+
+    .team-member-image {
+        border-radius: 50%;
+        border: 1px solid #c88a5a;
+        padding: 10px;
+        overflow: hidden;
+        line-height: 0;
+        margin: 0 auto;
+        -webkit-transition: opacity .5s ease-in-out;
+        -o-transition: opacity .5s ease-in-out;
+        transition: opacity .5s ease-in-out;
+        
+        img {
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .team-member-image:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#af9e91), to(#2a1403));
+        background-image: -o-linear-gradient(top, #af9e91, #2a1403);
+        background-image: linear-gradient(to bottom, #af9e91, #2a1403);
+        opacity: 0;
+        -webkit-transition: opacity .5s cubic-bezier(.46, .03, .52, .96);
+        -o-transition: opacity .5s cubic-bezier(.46, .03, .52, .96);
+        transition: opacity .5s cubic-bezier(.46, .03, .52, .96)
+    }
+
+    h2 {
+        color: $brand-gold;
+    }
+
+    .description {
+        color: $gray-lighter;
+        text-align: left;
+    }
+}
