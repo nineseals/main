@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.158c9264.chunk.css",
-    "main.js": "/static/js/main.169cc399.chunk.js",
-    "main.js.map": "/static/js/main.169cc399.chunk.js.map",
+    "main.css": "/static/css/main.c4475584.chunk.css",
+    "main.js": "/static/js/main.80c6d7c2.chunk.js",
+    "main.js.map": "/static/js/main.80c6d7c2.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.b240f91f.js",
     "runtime-main.js.map": "/static/js/runtime-main.b240f91f.js.map",
     "static/css/2.a33d9fc9.chunk.css": "/static/css/2.a33d9fc9.chunk.css",
     "static/js/2.defae3bd.chunk.js": "/static/js/2.defae3bd.chunk.js",
     "static/js/2.defae3bd.chunk.js.map": "/static/js/2.defae3bd.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.828986c8d34eaea78c9f283b71f8904c.js": "/precache-manifest.828986c8d34eaea78c9f283b71f8904c.js",
+    "precache-manifest.39594084636bd4f93f548acf049a3dc9.js": "/precache-manifest.39594084636bd4f93f548acf049a3dc9.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.a33d9fc9.chunk.css.map": "/static/css/2.a33d9fc9.chunk.css.map",
-    "static/css/main.158c9264.chunk.css.map": "/static/css/main.158c9264.chunk.css.map",
+    "static/css/main.c4475584.chunk.css.map": "/static/css/main.c4475584.chunk.css.map",
     "static/media/demonic_9_logo.jpg": "/static/media/demonic_9_logo.66ebe838.jpg",
     "static/media/nine_seals_1.png": "/static/media/nine_seals_1.cfd485a8.png",
     "static/media/nine_seals_2.png": "/static/media/nine_seals_2.8beb71c6.png",
@@ -33,7 +33,7 @@
     "static/js/runtime-main.b240f91f.js",
     "static/css/2.a33d9fc9.chunk.css",
     "static/js/2.defae3bd.chunk.js",
-    "static/css/main.158c9264.chunk.css",
-    "static/js/main.169cc399.chunk.js"
+    "static/css/main.c4475584.chunk.css",
+    "static/js/main.80c6d7c2.chunk.js"
   ]
 }
