@@ -10,9 +10,9 @@ const Header = (props) => {
     return (
       <div className="header-container">
         <div className="header-left">
-            <div className="logo-container">
+            {/* <div className="logo-container">
                 <img src={logo} alt="NineSeals Logo" className="logo" /> 
-            </div>
+            </div> */}
         </div>
         <div className="header-right">
             <div className="link">                
