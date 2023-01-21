@@ -43,20 +43,24 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const { ethereum } = window;
+
     if (web3) {
       checkWalletIsConnected();    
 
-      window.ethereum.on('accountsChanged', (accounts) => {
-        // Time to reload your interface with accounts[0]!
-        // console.log('Accounts Changed:', accounts);
-        initAccount();
-      });
-      
-      window.ethereum.on('chainChanged', (networkId) => {
-        // Time to reload your interface with the new networkId
-        // console.log('Network Changed:', networkId);
-        initContract();
-      });
+      if (ethereum) {
+        ethereum.on('accountsChanged', (accounts) => {
+          // Time to reload your interface with accounts[0]!
+          // console.log('Accounts Changed:', accounts);
+          initAccount();
+        });
+        
+        ethereum.on('chainChanged', (networkId) => {
+          // Time to reload your interface with the new networkId
+          // console.log('Network Changed:', networkId);
+          initContract();
+        });
+      }
     }
   }, 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -157,11 +161,11 @@ function App() {
       return;
     } else {
       console.log("Wallet exists! We're ready to go!")
-    }
     
-    await initAccount();
+      await initAccount();
 
-    await initContract();
+      await initContract();
+    }
   }
 
   const connectWalletHandler = async () => {
