@@ -20,23 +20,13 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
     uint8 private constant SALE_STATUS_DONE = 3;
     uint8 private constant SALE_STATUS_PAUSED = 4;
 
-    // uint8 public constant MAX_WL_PURCHASE_TOKENS = 3;
-    // uint8 public constant MAX_PUBLIC_PURCHASE_TOKENS = 5;    
-    // // uint16 public constant MAX_TOKENS = 444;    
-    // uint32 public PRESALE_DURATION = 1 days;
-
     bool private _mintPaused;
 
     uint64 private _tokenCounter;
 
-    uint64 public _totalAllowedTokens;
+    uint64 private _totalAllowedTokens;
 
     string private _baseTokenURI;
-    
-    // uint256 public preSaleStartTimestamp;
-
-    // bytes32 private merkleRootOne =
-    //     0xc891c5b4634598d1ed7cf4a3743ca20a33fc03bb10bcd7c45fe801e1434ba356;
 
     struct SaleConfig {
         uint16 maxBatchSize;
@@ -62,9 +52,8 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
         string memory name, 
         string memory symbol
     ) ERC721(name, symbol) ReentrancyGuard(){
-        _tokenCounter = 0;
+        _tokenCounter = 1;
         _totalAllowedTokens = DEFAULT_COLLECTION_SIZE;
-        // _baseTokenURI = initialURI;
     }
 
     modifier callerIsUser() {
@@ -142,13 +131,13 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
         publicSaleConfig.salePrice = salePrice;
     }
 
-    function setCollectionSize(uint256 collectionSize) external onlyOwner {
-        require(collectionSize >= totalSupply(), "cannot make collection size smaller than supply");
-        _totalAllowedTokens = uint64(collectionSize);
+    function setCollectionSize(uint256 _collectionSize) external onlyOwner {
+        require(_collectionSize >= totalSupply(), "cannot make collection size smaller than supply");
+        _totalAllowedTokens = uint64(_collectionSize);
     }
 
     function totalSupply() public view returns (uint256) {
-        return _tokenCounter;
+        return (_tokenCounter - 1);
     }
 
     
@@ -225,7 +214,7 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
     }
 
     function isSaleClosed() public view returns (bool) {
-        return totalSupply() > 0 && totalSupply() >= collectionSize();
+        return totalSupply() >= collectionSize();
     }
 
     function isMintPaused() public view returns (bool) {
@@ -246,7 +235,7 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
         }
     }
 
-    function getUserConfig(address owner) public view returns (uint256 userTokenBalance, uint256 userAllowlistSlots, uint256 userAllowlistRemaining, uint256 userPublicSlots, uint256 userPublicRemaining) {
+    function getUserConfig(address owner) public view returns (uint256 userAllowlistSlots, uint256 userAllowlistRemaining, uint256 userPublicSlots, uint256 userPublicRemaining, uint256 userTokenBalance) {
         uint256 _allowlistSlots = allowlistSlots(owner);
         uint256 _allowlistRemaining= allowlistTokensRemaining(owner);
         uint256 _publicSlots = maxMintableTokens(owner);
