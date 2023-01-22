@@ -32,7 +32,7 @@ module.exports = {
       provider: () => {
         return  new HDWalletProvider({
           privateKeys: [
-
+            process.env.PRIVATE_KEY
           ],
           // mnemonic: {
           //   phrase: process.env.MNEMONIC
