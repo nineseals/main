@@ -387,6 +387,8 @@ function App() {
     );
   };
 
+  const { _address: contractAddress } = contract || {};
+
   return (
     <div className='App'>      
       <main className="wrapper">
@@ -417,9 +419,13 @@ function App() {
               </div>
             </section>
             <section className="content-container section-footer">
-              <div className="contract-address">
-                Contract Address: <a href="https://etherscan.io/tx/" target="_blank" rel="noopener noreferrer">0x.............</a>
-              </div>
+              { contractAddress &&
+                (
+                  <div className="contract-address">
+                    Contract Address: <a href={`https://etherscan.io/tx/${contract._address}`} target="_blank" rel="noopener noreferrer">{contract._address}</a>
+                  </div>
+                )
+              }
             </section>
         </div>
       </main>
