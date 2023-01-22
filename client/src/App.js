@@ -422,7 +422,7 @@ function App() {
               { contractAddress &&
                 (
                   <div className="contract-address">
-                    Contract Address: <a href={`https://etherscan.io/tx/${contract._address}`} target="_blank" rel="noopener noreferrer">{contract._address}</a>
+                    Contract Address: <a href={`https://etherscan.io/address/${contract._address}`} target="_blank" rel="noopener noreferrer">{contract._address}</a>
                   </div>
                 )
               }
