@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c7a3717c7376d2ac841011d50a4d0a00",
+    "revision": "8be60348c06a1d94f39c2aa70524f042",
     "url": "/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/css/2.a33d9fc9.chunk.css"
   },
   {
-    "revision": "d4fee087df17509c50ff",
+    "revision": "ef5364945298d15087ca",
     "url": "/static/css/main.2aa956dc.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/js/2.272794dc.chunk.js"
   },
   {
-    "revision": "d4fee087df17509c50ff",
-    "url": "/static/js/main.02f6afa5.chunk.js"
+    "revision": "ef5364945298d15087ca",
+    "url": "/static/js/main.8b4d2697.chunk.js"
   },
   {
     "revision": "0a31ddf7382e0363a369",
@@ -60,8 +60,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/nine_seals_9.dbc96a31.png"
   },
   {
-    "revision": "26e537ac67a37fa2eed98b329d63bcb5",
-    "url": "/static/media/pfp_artist.26e537ac.png"
+    "revision": "25de1e0f5deb37dfff35820a37bbc090",
+    "url": "/static/media/pfp_artist.25de1e0f.png"
   },
   {
     "revision": "e14ff18f998beb94f9b9c91c7eedd022",
