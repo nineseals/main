@@ -61,6 +61,16 @@ contract NineSeals is ERC721,Ownable,ReentrancyGuard{
         _;
     }
 
+    // Mint: Owner
+    function ownerMint(uint256 quantity) external onlyOwner {
+        for(uint256 i = 0; i < quantity; i++) {
+            _safeMint(msg.sender, _tokenCounter);
+            _tokenCounter++;
+        }
+
+        mintoors[msg.sender].tokenBalance += uint128(quantity);
+    }
+
     // Mint: Allowlist
     function allowlistMint(uint256 quantity) external payable callerIsUser {
         SaleConfig memory config = allowlistSaleConfig;        
