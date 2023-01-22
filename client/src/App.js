@@ -21,7 +21,7 @@ const SALE_STATUS_PUBLIC = 2;
 const SALE_STATUS_DONE = 3;
 const SALE_STATUS_PAUSED = 4;
 
-const PUBLIC_SALE_KEY = 123456789;
+const PUBLIC_SALE_KEY = 15670169;
 
 function App() {
 
@@ -85,7 +85,7 @@ function App() {
 
   useEffect(() => {
     if (saleStatus > 0) {
-      console.log("Status:", saleStatus);
+      // console.log("Status:", saleStatus);
       getSalePrice();
     }
   }, 
@@ -410,15 +410,15 @@ function App() {
               <div className="content">
                 <h2 className="section-title">Team</h2>
                 <div className="team">
-                  <TeamMember imageUrl={pfpFounder} title="Founder" description="Alpha caller for Renga Alpha, Onchain Buccaneers, Domain alpha, Horde AI, Alpha king, Spesh alpha, and more." />
-                  <TeamMember imageUrl={pfpDev} title="Developer" description=".  .  ." />
-                  <TeamMember imageUrl={pfpArtist} title="Creative Director" description=".  .  ." />
+                  <TeamMember imageUrl={pfpFounder} title="Founder" twitter="itskfreeze" />
+                  <TeamMember imageUrl={pfpDev} title="Developer" twitter="badassbradash" />
+                  <TeamMember imageUrl={pfpArtist} title="Creative Director" twitter="woodrow_22" />
                 </div>
               </div>
             </section>
             <section className="content-container section-footer">
               <div className="contract-address">
-                Contract Address: 0x.............
+                Contract Address: <a href="https://etherscan.io/tx/" target="_blank" rel="noopener noreferrer">0x.............</a>
               </div>
             </section>
         </div>

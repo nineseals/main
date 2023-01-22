@@ -29,29 +29,49 @@
         }
     }
 
-    .team-member-image:after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 2;
-        background-image: -webkit-gradient(linear, left top, left bottom, from(#af9e91), to(#2a1403));
-        background-image: -o-linear-gradient(top, #af9e91, #2a1403);
-        background-image: linear-gradient(to bottom, #af9e91, #2a1403);
-        opacity: 0;
-        -webkit-transition: opacity .5s cubic-bezier(.46, .03, .52, .96);
-        -o-transition: opacity .5s cubic-bezier(.46, .03, .52, .96);
-        transition: opacity .5s cubic-bezier(.46, .03, .52, .96)
-    }
+    // .team-member-image:after {
+    //     content: '';
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    //     width: 100%;
+    //     height: 100%;
+    //     z-index: 2;
+    //     background-image: -webkit-gradient(linear, left top, left bottom, from(#af9e91), to(#2a1403));
+    //     background-image: -o-linear-gradient(top, #af9e91, #2a1403);
+    //     background-image: linear-gradient(to bottom, #af9e91, #2a1403);
+    //     opacity: 0;
+    //     -webkit-transition: opacity .5s cubic-bezier(.46, .03, .52, .96);
+    //     -o-transition: opacity .5s cubic-bezier(.46, .03, .52, .96);
+    //     transition: opacity .5s cubic-bezier(.46, .03, .52, .96)
+    // }
 
     h2 {
         color: $brand-gold;
     }
 
+    .twitter {
+        a {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: $brand-twitter;
+            text-decoration: none;
+
+            &:hover {
+                color: darken($brand-twitter, 20%);
+            }
+        }
+
+        .social-icon {
+            position: relative;
+            top: 5px;
+        }
+    }
+
     .description {
         color: $gray-lighter;
+        font-size: 1.2rem;
+        line-height: 150%;
         text-align: left;
     }
 }

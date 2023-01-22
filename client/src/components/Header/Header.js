@@ -1,7 +1,7 @@
 import React from 'react';
 import { SiDiscord, SiTwitter } from "react-icons/si";
 
-import logo from "../../assets/img/demonic_9_logo.jpg";
+// import logo from "../../assets/img/demonic_9_logo.jpg";
 import './Header.scss';
 
 

@@ -103,7 +103,11 @@ main.wrapper {
 
     &.section-footer {
       .contract-address {
-        color: $brand-gold;
+        &,
+        a {
+          color: $brand-gold;
+          text-decoration: none;
+        }
       }
     }
   }
