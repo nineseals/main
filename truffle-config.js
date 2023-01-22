@@ -28,7 +28,7 @@ module.exports = {
       // gas: 4465030,
       gasPrice: 10000000000,
     },
-    live: {
+    mainnet: {
       provider: () => {
         return  new HDWalletProvider({
           privateKeys: [
