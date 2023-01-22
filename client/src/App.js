@@ -92,6 +92,14 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   [saleStatus]);
 
+  useEffect(() => {
+    if (currentAccount) {
+      getUserConfig();
+    }
+  },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [currentAccount]);
+
   // // DEBUG ONLY
   // useEffect(() => {
   //   console.log("userConfig:", userConfig);
@@ -388,18 +396,19 @@ function App() {
   };
 
   const allowlistState = (salePctMinted) => {
+    const isAllowlist = (userConfig.userAllowlistSlots > 0 );
     return (
       <div>
         <h1>Allowlist Pre-sale</h1>
         {salePctMinted}
         <p>
         {
-          userConfig.userAllowlistSlots 
+          isAllowlist
           ? `You have ${userConfig.userAllowlistRemaining} allowlist mints remaining.`
           : `You are not on the allowlist`
         }
         </p>
-        { mintNftForm() }
+        { isAllowlist && mintNftForm() }
       </div>
     );
   };
