@@ -103,51 +103,63 @@ function App() {
   // }, [salePrice]);
 
   const init = async () => {
+    try {
     // Get network provider and web3 instance.
     const connWeb3 = await new Web3(Web3.givenProvider || 'http://localhost:8545');
     setWeb3(connWeb3);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const initAccount = async () => {
-    // Use web3 to get the user's accounts.
-    const accounts = await web3.eth.getAccounts();
+    try {
+      // Use web3 to get the user's accounts.
+      const accounts = await web3.eth.getAccounts();
 
-    // console.log(accounts);
+      // console.log(accounts);
 
-    if (accounts.length !== 0) {
-      const account = accounts[0];
-      console.log("Found an authorized account: ", account);
-      setCurrentAccount(account);
-    } else {
-      setCurrentAccount(null);
-      // console.log("No authorized account found");
+      if (accounts.length !== 0) {
+        const account = accounts[0];
+        console.log("Found an authorized account: ", account);
+        setCurrentAccount(account);
+      } else {
+        setCurrentAccount(null);
+        // console.log("No authorized account found");
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
   const initContract = async () => {
-    const ethNetworkId = await web3.eth.net.getId();
-    // console.log("Network: ", ethNetworkId);
+    try {
+      const ethNetworkId = await web3.eth.net.getId();
+      // console.log("Network: ", ethNetworkId);
 
-    if (!oContract.networks[ethNetworkId]) {
-      setErrorMessage("Please make sure you are connected to mainnet");
-      return;
-    } else {
-      clearErrorMessage();
+      if (!oContract.networks[ethNetworkId]) {
+        setErrorMessage("Please make sure you are connected to mainnet");
+        return;
+      } else {
+        clearErrorMessage();
+      }
+
+      const contractAddress = oContract.networks[ethNetworkId].address;
+      const abi = oContract.abi;
+
+      // Create a contract instance
+      const nftContract = new web3.eth.Contract(abi, contractAddress);
+
+      // console.log(nftContract);
+
+      const collectionSize = await nftContract.methods.collectionSize().call();
+
+      setCollectionSize(collectionSize);
+
+      setContract(nftContract);
+    } catch (err) {
+      console.log(err);
     }
-
-    const contractAddress = oContract.networks[ethNetworkId].address;
-    const abi = oContract.abi;
-
-    // Create a contract instance
-    const nftContract = new web3.eth.Contract(abi, contractAddress);
-
-    // console.log(nftContract);
-
-    const collectionSize = await nftContract.methods.collectionSize().call();
-
-    setCollectionSize(collectionSize);
-
-    setContract(nftContract);
   };
 
   const clearErrorMessage = () => setErrorMessage("");
@@ -179,19 +191,23 @@ function App() {
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       console.log("Found an account! Address: ", accounts[0]);
       setCurrentAccount(accounts[0]);
+    
+      await initAccount();
     } catch (err) {
       console.log(err)
     }
-
-    await initAccount();
   }
 
   const checkSaleStatus = async () => {
     if (!contract) { 
       console.log('No contract available to get status');
     } else {
-      const currStatus = await contract.methods.getSaleStatus().call();
-      setSaleStatus(Number(currStatus));
+      try {
+        const currStatus = await contract.methods.getSaleStatus().call();
+        setSaleStatus(Number(currStatus));
+      } catch (err) {
+        console.log(err)
+      }
     } 
   }
 
@@ -199,16 +215,24 @@ function App() {
     if (!contract) { 
       console.log('No contract available to get mint counts');
     } else {
-      const currMintCount = await contract.methods.totalSupply().call();
-      setNumMinted(currMintCount);
+      try {
+        const currMintCount = await contract.methods.totalSupply().call();
+        setNumMinted(currMintCount);
+      } catch (err) {
+        console.log(err)
+      }
     } 
   }
 
   const getSalePrice = async () => {
     if (contract) {
-      const mintCost = await contract.methods.getMintPrice().call();
-      // console.log(`Fetched mint cost: ${mintCost}`);
-      setSalePrice(mintCost);
+      try {
+        const mintCost = await contract.methods.getMintPrice().call();
+        // console.log(`Fetched mint cost: ${mintCost}`);
+        setSalePrice(mintCost);
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 
@@ -218,21 +242,25 @@ function App() {
       return false;
     } 
 
-    const _userConfig = await contract.methods.getUserConfig(currentAccount).call();
+    try {
+      const _userConfig = await contract.methods.getUserConfig(currentAccount).call();
 
-    
-    // const allowlistSlots = Number(await contract.methods.allowlistSlots(currentAccount).call());
-    // const allowlistRemaining =  Number(await contract.methods.allowlistTokensRemaining(currentAccount).call());
+      
+      // const allowlistSlots = Number(await contract.methods.allowlistSlots(currentAccount).call());
+      // const allowlistRemaining =  Number(await contract.methods.allowlistTokensRemaining(currentAccount).call());
 
-    // const publicSlots = Number(await contract.methods.maxMintableTokens(currentAccount).call());
-    // const publicRemaining =  Number(await contract.methods.publicSaleTokensRemaining(currentAccount).call());
+      // const publicSlots = Number(await contract.methods.maxMintableTokens(currentAccount).call());
+      // const publicRemaining =  Number(await contract.methods.publicSaleTokensRemaining(currentAccount).call());
 
-    // const tokenBalance = Number(await contract.methods.numberMinted(currentAccount).call());
+      // const tokenBalance = Number(await contract.methods.numberMinted(currentAccount).call());
 
-    setUserConfig({
-      ...userConfig,
-      ...(_userConfig || {})
-    });
+      setUserConfig({
+        ...userConfig,
+        ...(_userConfig || {})
+      });
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   
