@@ -24,7 +24,7 @@ const Header = (props) => {
                 <a href="https://twitter.com/ninesealsnft"><SiTwitter className="social-icon" /></a>
             </div>
             <div className="link">
-                <a href="https://discord.gg/KwGSBzAC"><SiDiscord className="social-icon" /></a>
+                <a href="https://discord.gg/sWhqbZEkT6"><SiDiscord className="social-icon" /></a>
             </div>
             <div>
                 {
