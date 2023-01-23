@@ -26,7 +26,7 @@ module.exports = {
       },
       network_id: 5,
       // gas: 4465030,
-      gasPrice: 10000000000,
+      gasPrice: 18000000000,
     },
     mainnet: {
       provider: () => {
@@ -42,7 +42,7 @@ module.exports = {
       },
       network_id: 1,        // Ethereum public network
       // gas: 4465030,
-      gasPrice: 10000000000,
+      gasPrice: 18000000000,
       // optional config values:
       // gas                  - use gas and gasPrice if creating type 0 transactions
       // gasPrice             - all gas values specified in wei
