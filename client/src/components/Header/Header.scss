@@ -30,6 +30,13 @@
             .social-icon {
                 color: $gray-light;
                 font-size: 2rem;
+
+                &.svg {
+                    position: relative;
+                    height: 2.8rem;
+                    top: -5px;
+                    right: -5px;
+                }
             }
         }
 

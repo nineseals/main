@@ -2,6 +2,8 @@ import React from 'react';
 import { SiDiscord, SiTwitter } from "react-icons/si";
 
 // import logo from "../../assets/img/demonic_9_logo.jpg";
+import IconOpenSea from "../../assets/img/icon_opensea.svg";
+
 import './Header.scss';
 
 
@@ -15,6 +17,9 @@ const Header = (props) => {
             </div> */}
         </div>
         <div className="header-right">
+            <div className="link">
+                <a href="https://opensea.io/collection/order-of-the-nine-seals"><img src={IconOpenSea} alt="OpenSea" className="social-icon svg" /></a>
+            </div>
             <div className="link">                
                 <a href="https://twitter.com/ninesealsnft"><SiTwitter className="social-icon" /></a>
             </div>
