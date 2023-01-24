@@ -296,7 +296,13 @@ function App() {
           });
 
         } else {
-          nftTxn = await contract.methods.publicSaleMint(mintQty, PUBLIC_SALE_KEY).send({ from: currentAccount, value: mintTotalCost.toString() }).on('receipt', function () {
+          const totalGas = 60000 + (60000 * mintQty);
+
+          nftTxn = await contract.methods.publicSaleMint(mintQty, PUBLIC_SALE_KEY).send({
+            gas: totalGas,
+            from: currentAccount, 
+            value: mintTotalCost.toString() 
+          }).on('receipt', function () {
             // console.log('receipt')
           });
         }
